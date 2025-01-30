@@ -4,7 +4,6 @@ import streamlit as st
 st.title("AI Chat APP with Streamlit 🤖")
 
 openai.api_key = st.secrets["openai"]["api_key"]
-
 message = st.text_input("What is on your mind?")
 
 if openai.api_key and message:
