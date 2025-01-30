@@ -9,9 +9,16 @@ load_dotenv()
 
 st.title("OpenAI Chat with Streamlit")
 
-message = st.text_input("What is on your mind?")
+col1, col2 = st.columns(2)
 
-if message:
+with col2:
+    API_Key = st.text_input("Enter your API Key for using AI")
+    openai.api_key = API_Key
+
+with col1:
+    message = st.text_input("What is on your mind?")
+
+if API_Key and message:
     def stream_openai_response():
         response = openai.ChatCompletion.create(
             stream=True,
@@ -24,4 +31,5 @@ if message:
 
     with st.container(border=True):
       st.write_stream(stream_openai_response)
-    
+else:
+    st.title("Please enter your API Key and message to get a response.")
