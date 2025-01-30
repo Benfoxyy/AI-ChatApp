@@ -1,4 +1,5 @@
 import openai
+from openai.error import AuthenticationError
 import streamlit as st
 
 st.title("AI Chat APP with Streamlit 🤖")
@@ -28,5 +29,5 @@ try:
             st.write_stream(stream_openai_response)
     else:
         st.warning("Please enter your API Key for using AI", icon="⚠️")
-except openai.error.AuthenticationError:
+except AuthenticationError:
     st.error("Invalid API Key!", icon="❌")
