@@ -8,6 +8,8 @@
 <a href="https://openai.com/" target="_blank"> <img src="https://www.svgrepo.com/show/306500/openai.svg" alt="OpenAI" width="50" height="35"> </a>
 </p>
 
+![AI-CHAT-BOT](./Documents/AI-DEMO.gif)
+
 # Planning For Future
 This bot is not compleated yet, And i've got multiple ideas to add it in future like :
 
