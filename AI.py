@@ -1,7 +1,7 @@
 from openai import OpenAI
 import streamlit as st
 
-st.title("AI Chat APP with Streamlit 🤖")
+st.title("AI Chat Bot with Streamlit 🤖")
 
 client = OpenAI(api_key=st.secrets["openai"]["api_key"])
 message = st.chat_input("What is on your mind?")
@@ -22,7 +22,6 @@ if message:
             if chunk.choices[0].delta.content is not None:
                 yield chunk.choices[0].delta.content
 
-    # Using st.container() for displaying the stream
     with st.container():
         with st.chat_message("user"):
             st.write(message)
