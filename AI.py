@@ -1,49 +1,32 @@
-from openai import OpenAI
+from models import gpt, gemini
 import streamlit as st
 
-st.title("Welcome To BenBot 🤖")
+# Get input from the user
 
-client = OpenAI(api_key=st.secrets["openai"]["api_key"])
+message = st.chat_input("What is in your mind?")
 
-# Initialize chat history in session state
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+# Display the title and instructions
+st.title("Welcome to BenBot")
+st.write("Choose an AI model to run")
 
-# Display chat messages from history
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+# Model selection
+model = st.selectbox("Select AI model", ["GPT", "Gemini"],
+                    index=None,
+                    placeholder="Select a model to continue ...",)
 
-message = st.chat_input("What is on your mind?")
-
-if message:
-    # Add user message to chat history
-    st.session_state.messages.append({"role": "user", "content": message})
-    with st.chat_message("user"):
-        st.markdown(message)
-
-    def stream_openai_response():
-        # Create chat completion with full history and selected model
-        completion = client.chat.completions.create(
-            model='gpt-4o-mini',
-            messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages],
-            stream=True
-        )
-
-        full_response = ""
-        for chunk in completion:
-            if chunk.choices[0].delta.content is not None:
-                delta_content = chunk.choices[0].delta.content
-                full_response += delta_content
-                yield delta_content
-
-        # Add assistant response to chat history
-        st.session_state.messages.append({"role": "assistant", "content": full_response})
-
-    with st.chat_message("assistant"):
-        st.write_stream(stream_openai_response)
-
-# Clear chat button
-if st.button("Clear Chat"):
-    st.session_state.messages = []
-    st.rerun()
+# Check if message is provided and model is selected
+with st.container(border=True):
+    if message:
+        with st.chat_message("user"):
+            st.write(message)
+        if model == "GPT":
+            with st.chat_message("assistant"):
+                st.write(gpt.gpt_model(message=message))
+        elif model == "Gemini":
+            with st.chat_message("assistant"):
+                st.write(gemini.gemini_model(message=message))
+        else:
+            with st.chat_message("assistant"):
+                st.write("Please select a model to chat chat")
+    else:
+        st.write("Please enter a message to get a response from the selected model.")
